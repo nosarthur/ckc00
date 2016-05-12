@@ -13,15 +13,15 @@ var zoom = d3.behavior.zoom()
 // set projection 
 var projection = d3.geo.mercator()
                    .scale(800)
-                   .center([-100, 37]);
+                   .center([-94, 37]);
 var path = d3.geo.path()
              .projection(projection);
     
 // prepare canvas 
 var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("class", "overlay")
+    .attr({ "width": width,
+            "height": height,
+            "class": "overlay"})
     .call(zoom);
 
 var g = svg.append("g");
@@ -65,9 +65,20 @@ function draw_users(){
            return projection([d['longitude'],d['latitude']])[0] })
          .attr('cy', function(d){
            return projection([d['longitude'],d['latitude']])[1] })
-         .attr('r','3px');
-    d3.select('#count')
-      .text('Head count: ' + users.length);
+         .attr('r','3px')
+         .on('mouseover',function(d){
+              svg.append('text').attr({'id':'tooltip',
+                                     'fill':'black'})
+                                .attr('x', d3.select(this).attr('cx'))
+                                .attr('y', d3.select(this).attr('cy'))
+                                .text(d.id+', '+d.city)
+            })
+         .on('mouseout', function(){
+             d3.select('#tooltip').remove();
+         });
+
+        d3.select('#count')
+          .text(users.length);
         });
 }
 

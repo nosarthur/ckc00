@@ -9,6 +9,7 @@ def create_database():
     conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
     conn.execute(''' CREATE TABLE ckc00 
         (id TEXT NOT NULL PRIMARY KEY,  \
+        name TEXT NOT NULL, \
         sex TEXT NOT NULL, \
         city TEXT NOT NULL, \
         state TEXT NOT NULL, \
@@ -22,11 +23,12 @@ def create_database():
         ckc00 = json.load(fin)
     for a in ckc00:
         conn.execute('''INSERT INTO ckc00
-            (id, sex, city, state, class, classId, latitude, longitude)
-            VALUES (?,?,?,?,?,?,?,?)''',
-            (a['88id'], a['sex'], a['city'], a['state'],
-             a['class'], a['classId'], a['latitude'],
-             a['longitude']))
+            (id, name, sex, city, state, class, classId, 
+                    latitude, longitude)
+            VALUES (?,?,?,?,?,?,?,?,?)''',
+            (a['88id'], a['name'],a['sex'], a['city'], 
+             a['state'], a['class'], a['classId'], 
+             a['latitude'], a['longitude']))
     conn.commit()
     conn.close()
 
