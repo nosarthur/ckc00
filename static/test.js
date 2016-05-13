@@ -34,52 +34,75 @@ function update_url(){
         '&class=' + document.getElementById("class_select").value;
 }
 
-var dataset;    // trick from Scott Murray
-d3.json('/static/us.json', function(error, data){
+var us;    // trick from Scott Murray
+d3.json('/static/us-states.json', function(error, data){
     if (error) throw error;
-    dataset = data;
-    g.append('path')
+    us = data.features;
+    g.append('g')
      .attr('class', 'states')
-     .datum(topojson.feature(dataset, dataset.objects.states))
+     .selectAll('path')
+     .data(us)
+     .enter()
+     .append('path')
      .attr("d", path); 
+
+    g.append('g')
+     .attr('class', 'states-name')
+     .selectAll("text")
+     .data(us)
+     .enter()
+     .append("svg:text")
+     .text(function(d){
+             return d.properties.name;
+             })
+     .attr("x", function(d){
+             return path.centroid(d)[0];
+             })
+     .attr("y", function(d){
+             return  path.centroid(d)[1];
+             })
+     .attr("text-anchor","middle")
+     .attr('fill', 'black');
      // first update
      draw_users();
 });
+
+var key = function(d){ return d.id };
 
 function draw_users(){
     url = update_url();
 
     d3.csv(url, function(error, users){
-        if (error) throw error;
-        users.forEach(function(d){
-              d.latitude = +d.latitude;
-              d.longitude= +d.longitude;
-          });
-        g.selectAll('circle')
-             //.data(data).exit()
-             .remove();
-        g.selectAll('circle')
-         .data(users).enter()
-         .append('circle')
-         .attr('cx', function(d){
-           return projection([d['longitude'],d['latitude']])[0] })
-         .attr('cy', function(d){
-           return projection([d['longitude'],d['latitude']])[1] })
-         .attr('r','3px')
-         .on('mouseover',function(d){
-              svg.append('text').attr({'id':'tooltip',
-                                     'fill':'black'})
-                                .attr('x', d3.select(this).attr('cx'))
-                                .attr('y', d3.select(this).attr('cy'))
-                                .text(d.id+', '+d.city)
-            })
-         .on('mouseout', function(){
-             d3.select('#tooltip').remove();
-         });
-
-        d3.select('#count')
-          .text(users.length);
+      if (error) throw error;
+      users.forEach(function(d){
+            d.latitude = +d.latitude;
+            d.longitude= +d.longitude;
         });
+      g.selectAll('circle')
+           .data(users, key).exit()
+           .remove();
+      g.selectAll('circle')
+       .data(users, key).enter()
+       .append('circle')
+       .attr('cx', function(d){
+         return projection([d['longitude'],d['latitude']])[0] })
+       .attr('cy', function(d){
+         return projection([d['longitude'],d['latitude']])[1] })
+       .attr('r','3px')
+       .on('mouseover',function(d){
+            svg.append('text').attr({'id':'tooltip',
+                                   'fill':'black'})
+                              .attr('x', d3.event.pageX+5)
+                              .attr('y', d3.event.pageY-110)
+                              .text(d.id+', '+d.city)
+          })
+       .on('mouseout', function(){
+           d3.select('#tooltip').remove();
+       });
+
+      d3.select('#count')
+        .text(users.length);
+      });
 }
 
 function zoomed() {

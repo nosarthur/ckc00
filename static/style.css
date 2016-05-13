@@ -11,10 +11,6 @@
   stroke:#fff;
 }
 
-.states .active {
-  fill: orange;
-}
-
 .state-borders {
   fill: none;
   stroke: #fff;
@@ -61,4 +57,8 @@ label{
 
 h1 {
     text-align: center;
+}
+
+svg text{ 
+    pointer.events: none;
 }
