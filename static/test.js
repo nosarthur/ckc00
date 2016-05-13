@@ -46,23 +46,6 @@ d3.json('/static/us-states.json', function(error, data){
      .append('path')
      .attr("d", path); 
 
-    g.append('g')
-     .attr('class', 'states-name')
-     .selectAll("text")
-     .data(us)
-     .enter()
-     .append("svg:text")
-     .text(function(d){
-             return d.properties.name;
-             })
-     .attr("x", function(d){
-             return path.centroid(d)[0];
-             })
-     .attr("y", function(d){
-             return  path.centroid(d)[1];
-             })
-     .attr("text-anchor","middle")
-     .attr('fill', 'black');
      // first update
      draw_users();
 });
@@ -74,6 +57,37 @@ function draw_users(){
 
     d3.csv(url, function(error, users){
       if (error) throw error;
+      var activeState = new Set();
+      var state2update = []
+      for (var i=0;i<users.length;i++){
+          activeState.add(users[i].state);
+      }
+      for (var i=0;i<us.length;i++){
+          if (activeState.has(us[i].properties.name)) {
+              state2update.push({'id':us[i].properties.name, 
+                        's':us[i]});
+          }
+      }
+      g.selectAll("text")
+       .data(state2update, key).exit().remove()
+      g.selectAll("text")
+       .attr('class', 'states-name')
+       .data(state2update, key)
+       .enter()
+       .append("svg:text")
+       .text(function(d){
+             return d.s.properties.name;
+             })
+       .attr("x", function(d){
+             return path.centroid(d.s)[0];
+             })
+       .attr("y", function(d){
+             return  path.centroid(d.s)[1];
+             })
+       .attr("text-anchor","middle")
+       .attr("font-size","16px")
+       .attr('fill', 'black');
+
       users.forEach(function(d){
             d.latitude = +d.latitude;
             d.longitude= +d.longitude;
@@ -91,6 +105,7 @@ function draw_users(){
        .attr('r','3px')
        .on('mouseover',function(d){
             svg.append('text').attr({'id':'tooltip',
+                                    'font-size':'16px',
                                    'fill':'black'})
                               .attr('x', d3.event.pageX+5)
                               .attr('y', d3.event.pageY-110)
