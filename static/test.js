@@ -5,6 +5,19 @@ var width = 960,
 d3.select("#sex_select").on("input", draw_users);
 d3.select("#class_select").on("input", draw_users);
 
+function search(e){
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if(code == 13) { //Enter keycode
+        var name = document.getElementById("name").value;
+        if (name){
+          draw_from_url( '/db2?name=' + name);
+        }
+        else{
+          draw_from_url(URL_BASE+'sex=all&class=all');
+        }
+    }
+}
+
 var zoom = d3.behavior.zoom()
              .translate([0, 0])
              .scale(1)
@@ -54,7 +67,10 @@ var key = function(d){ return d.id };
 
 function draw_users(){
     url = update_url();
+    draw_from_url(url);
+}
 
+function draw_from_url(url){
     d3.csv(url, function(error, users){
       if (error) throw error;
       var activeState = new Set();

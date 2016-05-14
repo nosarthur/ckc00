@@ -32,6 +32,16 @@ def create_database():
     conn.commit()
     conn.close()
 
+def do_name_query(name):
+    basecmd = '''SELECT id, city, state, latitude, longitude 
+                FROM ckc00 '''
+    conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
+    c = conn.execute(basecmd+'WHERE name=?', (name,))
+    results = c.fetchall()
+    conn.close()
+    str_rows = [','.join(map(str, row)) for row in results]
+    return '\n'.join(str_rows)
+
 def do_query(sex, clss):
     ''' mimics csv output '''
     basecmd = '''SELECT id, city, state, latitude, longitude 

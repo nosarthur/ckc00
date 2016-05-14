@@ -5,13 +5,12 @@
     <meta charset="utf-8">
     <link rel='stylesheet' href='/static/style.css'>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="https://d3js.org/topojson.v1.min.js"></script>
   </head>
 
   <body>
 
-  <h1> ckc00er distribution  </h1>
 
+  <h1> ckc00er locator </h1>
 
 <div class='row'>
   <div class='col1'>
@@ -37,14 +36,15 @@
         <span id='count' > </span>
     </div>
     <div class='col1'> 
-      <form method='post' action='/'> 
-        <input type="password" name="passw">
-        <input type="submit" value="Login">
-      </form>
+       <span> Search </span>
+        <input id='name' onKeyPress="search(event)" placeholder='First Last'>
     </div>
 </div>
-    <script src="/static/test.js"></script>
+  <script src="/static/test.js"></script>
 
   </body>
 
 </html>
+
+
+
