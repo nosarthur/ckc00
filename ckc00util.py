@@ -35,7 +35,7 @@ def create_database():
 def do_name_query(name):
     basecmd = '''SELECT id, city, state, latitude, longitude 
                 FROM ckc00 '''
-    conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
+    conn = sqlite3.connect(path.join(ROOT,'static/ckc00.sqlite'))
     c = conn.execute(basecmd+'WHERE name=?', (name,))
     results = c.fetchall()
     conn.close()
@@ -47,7 +47,7 @@ def do_query(sex, clss):
     basecmd = '''SELECT id, city, state, latitude, longitude 
                 FROM ckc00 '''
 
-    conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
+    conn = sqlite3.connect(path.join(ROOT,'static/ckc00.sqlite'))
     if sex=='all' and clss=='all':
         c = conn.execute(basecmd)
     elif sex=='all' and clss!='all':
