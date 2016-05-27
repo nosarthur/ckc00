@@ -19,7 +19,7 @@ def name_query():
     return header + do_name_query(name)
 
 @app.route('/db')
-def print_data():
+def class_query():
     sex = request.args.get('sex')
     clss = request.args.get('class')
 
