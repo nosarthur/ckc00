@@ -9,6 +9,11 @@ function search(e){
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code == 13) { //Enter keycode
         var name = document.getElementById("name").value;
+        name = name.toLowerCase()
+                   .split(' ')
+                   .map(function(word) {
+                       return word[0].toUpperCase() + word.substr(1); })
+                   .join(' ');
         if (name){
           draw_from_url( '/db2?name=' + name);
         }
