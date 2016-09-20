@@ -18,7 +18,7 @@ function search(e){
           draw_from_url( '/db2?name=' + name);
         }
         else{
-          draw_from_url(URL_BASE+'sex=all&class=all');
+          draw_from_url(URL_BASE+'sex=all&classType=all');
         }
     }
 }
@@ -49,7 +49,7 @@ var URL_BASE = '/db?';
 function update_url(){
     return URL_BASE + 
         'sex=' + document.getElementById("sex_select").value +
-        '&class=' + document.getElementById("class_select").value;
+        '&classType=' + document.getElementById("class_select").value;
 }
 
 var us;    // trick from Scott Murray
@@ -68,7 +68,7 @@ d3.json('/static/us-states.json', function(error, data){
      draw_users();
 });
 
-var key = function(d){ return d.id };
+var key = function(d){ return d.id }; // state-id
 
 function draw_users(){
     url = update_url();
@@ -130,7 +130,7 @@ function draw_from_url(url){
                                    'fill':'black'})
                               .attr('x', d3.event.pageX+5)
                               .attr('y', d3.event.pageY-110)
-                              .text(d.id+', '+d.city)
+                              .text(d.bbs_id+', '+d.city)
           })
        .on('mouseout', function(){
            d3.select('#tooltip').remove();
