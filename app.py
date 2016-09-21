@@ -35,13 +35,13 @@ def name_query():
 @app.route('/db')
 def class_query():
     sex = request.args.get('sex')
-    classType = request.args.get('classType')
+    class_type = request.args.get('class_type')
 
-    if not sex or not classType:
+    if not sex or not class_type:
         return redirect(url_for('index'))
 
     header = 'id,bbs_id,city,state,latitude,longitude\n'
-    return header + do_query(sex, classType)
+    return header + do_query(sex, class_type)
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):

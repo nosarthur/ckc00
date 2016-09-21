@@ -18,7 +18,7 @@ function search(e){
           draw_from_url( '/db2?name=' + name);
         }
         else{
-          draw_from_url(URL_BASE+'sex=all&classType=all');
+          draw_from_url(URL_BASE+'sex=all&class_type=all');
         }
     }
 }
@@ -49,7 +49,7 @@ var URL_BASE = '/db?';
 function update_url(){
     return URL_BASE + 
         'sex=' + document.getElementById("sex_select").value +
-        '&classType=' + document.getElementById("class_select").value;
+        '&class_type=' + document.getElementById("class_select").value;
 }
 
 var us;    // trick from Scott Murray

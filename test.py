@@ -15,11 +15,12 @@ class User(Base):
     sex = Column(String, nullable=False)
     city = Column(String)
     state = Column(String)
-    classType = Column(String, nullable=False)
-    classId = Column(String, nullable=False)
+    class_type = Column(String, nullable=False)
+    class_id = Column(String, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
     
     def __repr__(self):
         return "<User(88id='%s', name='%s'>" % (self.bbs_id, self.name)
 
+Base.metadata.create_all(engine)

@@ -18,8 +18,8 @@ def create_database():
         sex TEXT NOT NULL, \
         city TEXT, \
         state TEXT, \
-        classType TEXT NOTE NULL, \
-        classId TEXT NOT NULL, \
+        class_type TEXT NOTE NULL, \
+        class_id TEXT NOT NULL, \
         latitude REAL, \
         longitude REAL);''')
 
@@ -28,11 +28,11 @@ def create_database():
         ckc00 = json.load(fin)
     for a in ckc00:
         conn.execute('''INSERT INTO ckc00
-            (id, bbs_id, name, sex, city, state, classType, classId, 
+            (id, bbs_id, name, sex, city, state, class_type, class_id, 
                     latitude, longitude)
             VALUES (?,?,?,?,?,?,?,?,?,?)''',
             (a['id'], a['88id'], a['name'],a['sex'], a['city'], 
-             a['state'], a['classType'], a['classId'], 
+             a['state'], a['class_type'], a['class_id'], 
              a['latitude'], a['longitude']))
     conn.commit()
     conn.close()
@@ -47,21 +47,21 @@ def do_name_query(name):
     str_rows = [','.join(map(str, row)) for row in results]
     return '\n'.join(str_rows)
 
-def do_query(sex, classType):
+def do_query(sex, class_type):
     ''' mimics csv output '''
     basecmd = '''SELECT id, bbs_id, city, state, latitude, longitude 
                 FROM ckc00 '''
 
     conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
-    if sex=='all' and classType=='all':
+    if sex=='all' and class_type=='all':
         c = conn.execute(basecmd)
-    elif sex=='all' and classType!='all':
-        c = conn.execute(basecmd+'WHERE classType=?',(classType,))
-    elif sex!='all' and classType=='all':
+    elif sex=='all' and class_type!='all':
+        c = conn.execute(basecmd+'WHERE class_type=?',(class_type,))
+    elif sex!='all' and class_type=='all':
         c = conn.execute(basecmd+'WHERE sex=?',(sex,))
     else:
-        c = conn.execute(basecmd+'WHERE sex=? AND classType=?',
-                        (sex, classType))
+        c = conn.execute(basecmd+'WHERE sex=? AND class_type=?',
+                        (sex, class_type))
 
     results = c.fetchall()
     conn.close()
