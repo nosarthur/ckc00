@@ -36,7 +36,7 @@ var path = d3.geo.path()
              .projection(projection);
     
 // prepare canvas 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#map").append("svg")
     .attr({ "width": width,
             "height": height,
             "class": "overlay"})
@@ -128,7 +128,7 @@ function draw_from_url(url){
             svg.append('text').attr({'id':'tooltip',
                                     'font-size':'16px',
                                    'fill':'black'})
-                              .attr('x', d3.event.pageX+5)
+                              .attr('x', d3.event.pageX-50)
                               .attr('y', d3.event.pageY-110)
                               .text(d.display_name+', '+d.city)
           })

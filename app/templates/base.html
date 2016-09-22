@@ -2,6 +2,12 @@
 
 {% block title %} CKC00 {% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' type='text/css' 
+		href='{{ url_for('static', filename='style.css') }}'>
+{% endblock %}
+
 {% block navbar %}
 <div class='navbar navbar-default' role='navigation'>
     <div class='container'>
@@ -21,8 +27,8 @@
                 <li><a href='#'>News</a></li>
                 <li><a href='#'>Feedback</a></li>
                 {% else %}
-                <li><a href='{{ url_for('home.help') }}'>Help</a></li>
                 {% endif %}
+                <li><a href='{{ url_for('home.help') }}'>Help</a></li>
             </ul>
             <ul class='nav navbar-nav navbar-right'>
                 {% if current_user.is_authenticated %}
@@ -37,7 +43,7 @@
 {% endblock %}
 
 {% block content %}
-<div class='container-fluid'>
+<div class='container'>
     {% for message in get_flashed_messages() %}
     <div class='alert alert-warning'>
         <button type='button' class='close' data-dismiss='alert'>&times;</button>

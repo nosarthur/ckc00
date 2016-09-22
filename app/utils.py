@@ -5,7 +5,7 @@ from os import path
 
 ROOT = path.dirname(path.realpath(__file__))
 
-def create_database():
+def create_database(): # obsolete
     conn = sqlite3.connect(path.join(ROOT,'ckc00.sqlite'))
     conn.execute(''' CREATE TABLE ckc00 
         (id INTEGER NOT NULL PRIMARY KEY, \

@@ -29,13 +29,15 @@ def user(username):
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.name = form.name.data
+        current_user.username = form.username.data
+        current_user.site = form.site.data
 
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
         return redirect(url_for('home.user', username=current_user.username))
-    form.name.data = current_user.name
+    form.username.data = current_user.username
+    form.site.data = current_user.site
 
     return render_template('home/profile.html', form=form)
 
