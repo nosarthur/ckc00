@@ -1,13 +1,22 @@
 # classmate locator
 
-A web application that visualizes the location of classmates. 
+A web application that visualizes the location of CKC00 alumni. 
+
+## Features
+
+* anonymous 
+    * display alumni on US map
+    * query using alumnus name
+    * query with sex and class
+* registered user
+    * display alumni names
+    * 
 
 ## Feature requests
 
 * user sign-up
     * profile
 * email users
-* database
 * user privilege
     * see real names instead of 88 IDs
     * request features

@@ -3,10 +3,6 @@ import sqlite3
 import json
 from os import path
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float
-
 ROOT = path.dirname(path.realpath(__file__))
 
 def create_database():
@@ -26,14 +22,14 @@ def create_database():
     # add entries
     with open('ckc00.json') as fin:
         ckc00 = json.load(fin)
-    for a in ckc00:
+    for usr in ckc00:
         conn.execute('''INSERT INTO ckc00
             (id, bbs_id, name, sex, city, state, class_type, class_id, 
                     latitude, longitude)
             VALUES (?,?,?,?,?,?,?,?,?,?)''',
-            (a['id'], a['88id'], a['name'],a['sex'], a['city'], 
-             a['state'], a['class_type'], a['class_id'], 
-             a['latitude'], a['longitude']))
+            (usr['id'], usr['bbs_id'], usr['name'], usr['sex'], 
+             usr['city'], usr['state'], usr['class_type'], 
+             usr['class_id'], usr['latitude'], usr['longitude']))
     conn.commit()
     conn.close()
 

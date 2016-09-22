@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class='page-header user-profile' >
+    {% if current_user == user %}
+    <a class='btn btn-default pull-right' href='{{ url_for('home.profile') }}'>Edit Profile</a>
+    {% endif %}
+    <h1>{{ user.username }}</h1>
+    <p>
+        {% if user.name %} 
+        {{ user.name }} <br>
+        {% endif %}
+        Water points:
+        {{ user.awards }} <br>
+        Member since:
+        {{ user.member_since }} <br>
+    </p>
+</div>
+{% endblock %}
+

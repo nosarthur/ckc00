@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, redirect,  url_for, \
 from flask_wtf import Form
 from wtforms.fields import RadioField, SubmitField
 
+from flask_sqlalchemy import SQLAlchemy
+
 import hashlib
 import hmac
 
@@ -12,6 +14,8 @@ from utils import do_query, do_name_query
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mySecret!' # use env var
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db = SQLAlchemy(app)
 
 @app.route('/', methods=['POST','GET'])
 def index():
@@ -43,9 +47,10 @@ def class_query():
     header = 'id,bbs_id,city,state,latitude,longitude\n'
     return header + do_query(sex, class_type)
 
-@app.route('/profile/<username>', methods=['GET', 'POST'])
-def profile(username):
-    return render_template('signup.html', name=username)
+@app.route('/user/<name>', methods=['GET', 'POST'])
+def user(name):
+    return 'hello, {0}!'.format(name)
+#    return render_template('signup.html', name=username)
 
 if __name__ == '__main__':
     app.run(debug=True)

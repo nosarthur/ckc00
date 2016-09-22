@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block styles %}
+{{ super() }}
+<link rel='stylesheet' 
+    href='{{ url_for('static', filename='style.css') }}'>
+{% endblock %}
+
+{% block page_content %}
+
+<div class='row'>
+    <div class='col-md-3'> 
+    <label for="sex_select"> Sex = </label>
+    <select id="sex_select">
+      <option value="all">All</option>
+      <option value="m">Male</option>
+      <option value="f">Female</option>
+    </select>
+    </div>
+    <div class='col-md-3'> 
+    <label for="class_select"> Class = </label>
+    <select id="class_select">
+    <option value="all">All</option>
+    <option value="mixed">Mixed</option>
+    <option value="litart">Lit. Art</option>
+    <option value="science">Science</option>
+    <option value="eduexp">Edu. Exp.</option>
+    </select>
+    </div>
+    <div class='col-md-3'> 
+    <label> Head count: </label>
+    <span id='count' > </span>
+    </div>
+    <div class='col-md-3'> 
+    <input id='name' onKeyPress="search(event)" placeholder='First Last'>
+    </div>
+</div>
+
+
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/static/test.js"></script>
+
+
+{% endblock %}
+
+
