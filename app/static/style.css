@@ -30,19 +30,6 @@ circle:hover{
     fill: blue;
 }
 
-.col1, .col2, {
-    position: relative;
-    min-height: 1px;
-    padding-left: 15px;
-    padding-right: 15px;  
-}
-
-.col1 {
-    width: 22%;
-}
-.col2 {
-    width: 13%;
-}
 .row {
     width: 100%;
     margin-bottom: 8px;
@@ -53,10 +40,6 @@ label{
     display: inline-block; 
     width: 90px; 
     text-align: right;
-}
-
-h1 {
-    text-align: center;
 }
 
 svg text{ 

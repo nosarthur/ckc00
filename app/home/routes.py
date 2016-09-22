@@ -47,11 +47,13 @@ def query():
     if not sex or not class_type:
         return redirect(url_for('home.index'))
 
-    header = 'id,bbs_id,city,state,latitude,longitude\n'
+    header = 'id,display_name,city,state,latitude,longitude\n'
+    base_query = '''SELECT id, bbs_id, city, state, 
+                           latitude, longitude FROM ckc00 '''
     if current_user.is_authenticated:
-        pass
-    else:
-        return header + do_query(sex, class_type)
+        base_query = base_query.replace('bbs_id', 'name')
+
+    return header + do_query(sex, class_type, base_query)
 
 @home.route('/db2')
 def name_query():
@@ -59,10 +61,13 @@ def name_query():
 
     if not name:
         return redirect(url_for('home.index'))
-    header = 'id,bbs_id,city,state,latitude,longitude\n'
+
+    base_query= '''SELECT id, bbs_id, city, state, latitude, longitude 
+                FROM ckc00 '''
+    header = 'id,display_name,city,state,latitude,longitude\n'
     if current_user.is_authenticated:
-        pass
-    else:
-        return header + do_name_query(name)
+        base_query = base_query.replace('bbs_id', 'name')
+    
+    return header + do_name_query(name, base_query)
 
     

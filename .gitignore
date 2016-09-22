@@ -2,4 +2,3 @@
 *.swp
 *.json
 *.sqlite
-tmp/*

@@ -130,7 +130,7 @@ function draw_from_url(url){
                                    'fill':'black'})
                               .attr('x', d3.event.pageX+5)
                               .attr('y', d3.event.pageY-110)
-                              .text(d.bbs_id+', '+d.city)
+                              .text(d.display_name+', '+d.city)
           })
        .on('mouseout', function(){
            d3.select('#tooltip').remove();
