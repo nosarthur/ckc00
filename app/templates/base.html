@@ -24,7 +24,6 @@
                 <li><a href='{{ url_for('home.index') }}'>Home</a></li>
                 {% if current_user.is_authenticated %}
                 <li><a href='{{ url_for('home.user', username=current_user.username) }}'>Profile</a></li>
-                <li><a href='#'>News</a></li>
                 <li><a href='#'>Feedback</a></li>
                 {% else %}
                 {% endif %}

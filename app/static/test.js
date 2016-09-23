@@ -128,7 +128,7 @@ function draw_from_url(url){
             svg.append('text').attr({'id':'tooltip',
                                     'font-size':'16px',
                                    'fill':'black'})
-                              .attr('x', d3.event.pageX-50)
+                              .attr('x', d3.event.pageX-80)
                               .attr('y', d3.event.pageY-110)
                               .text(d.display_name+', '+d.city)
           })

@@ -17,7 +17,7 @@
         {{ user.awards }} <br>
         {% if user.member_since %}
         Member since:
-        {{ user.member_since }} <br>
+        {{ user.member_since.strftime('%Y-%m-%d') }} <br>
         {% endif %}
     </p>
 </div>

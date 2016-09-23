@@ -10,15 +10,13 @@ A web application that visualizes the location of CKC00 alumni.
     * query with sex and class
 * registered user
     * display alumni names
-    * 
+    * view alumni profiles
+    * edit profiles
 
 ## Feature requests
 
-* user sign-up
-    * profile
 * email users
 * user privilege
-    * see real names instead of 88 IDs
     * request features
     * report bugs
     * submit updates
