@@ -26,6 +26,7 @@ A web application that visualizes the location of CKC00 alumni.
     * award points: water droplets
         * input information
         * referal 
+* error handlers
 
 ## License
 This project is licensed under the MIT License.

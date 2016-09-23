@@ -15,7 +15,7 @@ function search(e){
                        return word[0].toUpperCase() + word.substr(1); })
                    .join(' ');
         if (name){
-          draw_from_url( '/db2?name=' + name);
+          draw_from_url( '/db?name=' + name);
         }
         else{
           draw_from_url(URL_BASE+'sex=all&class_type=all');

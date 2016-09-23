@@ -2,12 +2,14 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-class Config:
+class Config(object):
+    DEBUG = False
+    TESTING = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'lalala'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 

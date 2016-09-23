@@ -1,8 +1,10 @@
+import io
+import csv
 from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_required, current_user
 
 from . import home
-from .forms import ProfileForm, QueryForm
+from .forms import ProfileForm
 from .. import db
 from ..models import User
 
@@ -10,10 +12,7 @@ from ..utils import do_query, do_name_query
 
 @home.route('/', methods=['GET', 'POST'])
 def index():
-    form = QueryForm()
-    if form.validate_on_submit():
-        pass
-    return render_template('home/index.html', form=form)
+    return render_template('home/index.html')
 
 @home.route('/help')
 def help():
@@ -45,31 +44,38 @@ def profile():
 def query():
     sex = request.args.get('sex')
     class_type = request.args.get('class_type')
+    name = request.args.get('name')
+
+    output = io.BytesIO()
+    writer = csv.writer(output)
+
+    cols = ['id', 'display_name', 'city', 'state', 'latitude', 'longitude']
+    writer.writerow(cols)
+    if current_user.is_authenticated:
+        cols[1] = 'name'
+    else:
+        cols[1] = 'bbs_id'
+    q = User.query.with_entities(*(getattr(User, col) for col in cols))
+
+    if name: # name query
+        rows = q.filter_by(name=name)
+        writer.writerows(rows)
+        return output.getvalue()
 
     if not sex or not class_type:
         return redirect(url_for('home.index'))
 
-    header = 'id,display_name,city,state,latitude,longitude\n'
-    base_query = '''SELECT id, bbs_id, city, state, 
-                           latitude, longitude FROM ckc00 '''
-    if current_user.is_authenticated:
-        base_query = base_query.replace('bbs_id', 'name')
-
-    return header + do_query(sex, class_type, base_query)
-
-@home.route('/db2')
-def name_query():
-    name = request.args.get('name')
-
-    if not name:
-        return redirect(url_for('home.index'))
-
-    base_query= '''SELECT id, bbs_id, city, state, latitude, longitude 
-                FROM ckc00 '''
-    header = 'id,display_name,city,state,latitude,longitude\n'
-    if current_user.is_authenticated:
-        base_query = base_query.replace('bbs_id', 'name')
+    print q
+    if sex=='all' and class_type=='all':
+        rows = q.all()
+    elif sex=='all' and class_type!='all':
+        rows = q.filter_by(class_type=class_type)
+    elif sex!='all' and class_type=='all':
+        rows = q.filter_by(sex=sex)
+    else:
+        rows = q.filter_by(sex=sex, class_type=class_type)
     
-    return header + do_name_query(name, base_query)
+    writer.writerows(rows)
+    return output.getvalue()
 
-    
+   

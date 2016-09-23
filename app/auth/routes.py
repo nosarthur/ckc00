@@ -8,10 +8,12 @@ from ..models import User
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    print 'debug? ', current_app.config['DEBUG']
+    print 'key? ', current_app.config['SECRET_KEY']
+    print current_app.config['SQLALCHEMY_DATABASE_URI']
     if not current_app.config['DEBUG'] \
         and not current_app.config['TESTING'] and not request.is_secure:
-        return redirect(url_for('.login', __external=True, 
-                                          _scheme='https'))
+        return redirect(url_for('.login', _external=True, _scheme='https'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
