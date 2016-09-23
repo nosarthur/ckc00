@@ -8,8 +8,6 @@ from .forms import ProfileForm
 from .. import db
 from ..models import User
 
-from ..utils import do_query, do_name_query
-
 @home.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('home/index.html')
@@ -28,7 +26,13 @@ def user(username):
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.username = form.username.data
+        username = form.username.data
+        user = User.query.filter_by(username=username).first()        
+        if not user or user.id == current_user.id:
+            current_user.username = username
+        else:
+            flash('This username is already taken.')
+            return redirect(url_for('home.profile'))
         current_user.site = form.site.data
 
         db.session.add(current_user._get_current_object())
@@ -65,7 +69,6 @@ def query():
     if not sex or not class_type:
         return redirect(url_for('home.index'))
 
-    print q
     if sex=='all' and class_type=='all':
         rows = q.all()
     elif sex=='all' and class_type!='all':
