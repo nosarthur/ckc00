@@ -6,13 +6,15 @@ from . import auth
 from .forms import LoginForm
 from ..models import User
 
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     print 'debug? ', current_app.config['DEBUG']
     print 'key? ', current_app.config['SECRET_KEY']
     print current_app.config['SQLALCHEMY_DATABASE_URI']
     if not current_app.config['DEBUG'] \
-        and not current_app.config['TESTING'] and not request.is_secure:
+       and not current_app.config['TESTING'] \
+       and not request.is_secure:
         return redirect(url_for('.login', _external=True, _scheme='https'))
     form = LoginForm()
     if form.validate_on_submit():
@@ -23,6 +25,7 @@ def login():
         login_user(user, form.remember_me.data)
         return redirect(request.args.get('next') or url_for('home.index'))
     return render_template('auth/login.html', form=form)
+
 
 @auth.route('/logout')
 @login_required

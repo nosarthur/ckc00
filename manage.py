@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os 
+import os
 import json
 from flask.ext.script import Manager
 from datetime import datetime
@@ -11,12 +11,14 @@ from app.models import User
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 
+
 @manager.command
 def createDB(drop_first=False):
     ''' Create the database '''
     if drop_first:
         db.drop_all()
     db.create_all()
+
 
 @manager.command
 def adduser(email, user_id):
@@ -29,18 +31,19 @@ def adduser(email, user_id):
         sys.exit('Error: passwords do not match.')
     db.create_all()
     user = User.query.filter_by(id=user_id).first()
-    user.email = email 
+    user.email = email
     user.password = password
     user.member_since = datetime.utcnow()
     db.session.commit()
     print('User {0} was registered successfully.'.format(user_id))
+
 
 @manager.command
 def createDBfromJSON():
     ''' Create DB from json file '''
     db.drop_all()
     db.create_all()
-    with open ('ckc00.json') as fin:
+    with open('ckc00.json') as fin:
         users = json.load(fin)
 
     for user in users:
@@ -51,6 +54,3 @@ def createDBfromJSON():
 
 if __name__ == '__main__':
     manager.run()
-
-
-

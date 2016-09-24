@@ -28,17 +28,16 @@ def profile():
     if form.validate_on_submit():
         username = form.username.data
         user = User.query.filter_by(username=username).first()        
-        if not user or user.id == current_user.id:
-            current_user.username = username
-        else:
+        if user and user.id != current_user.id:
             flash('This username is already taken.')
             return redirect(url_for('home.profile'))
+        current_user.username = username
         current_user.site = form.site.data
 
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
-        return redirect(url_for('home.user', username=current_user.username))
+        return redirect(url_for('home.user', username=username))
     form.username.data = current_user.username
     form.site.data = current_user.site
 
