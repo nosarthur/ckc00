@@ -13,6 +13,12 @@
         {% else %}
         {{ user.name }} <br>
         {% endif %}
+        {% if current_user.is_authenticated %}
+            {% if user.email %}
+            {{ user.email }} <br>
+            {% endif %}
+            {{ user.city }} , {{ user.state }} <br>
+        {% endif %}
         Water points:
         {{ user.awards }} <br>
         {% if user.member_since %}

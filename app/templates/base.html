@@ -27,6 +27,7 @@
                 <li><a href='#'>Feedback</a></li>
                 {% else %}
                 {% endif %}
+                <li><a href="{{ url_for('home.stats') }}">Statistics</a></li>
                 <li><a href='{{ url_for('home.help') }}'>Help</a></li>
             </ul>
             <ul class='nav navbar-nav navbar-right'>

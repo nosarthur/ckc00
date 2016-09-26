@@ -9,3 +9,8 @@ class ProfileForm(Form):
     site = StringField('website',
                        validators=[URL(), Optional(), Length(5, 64)])
     submit = SubmitField('Submit')
+
+
+class StatForm(Form):
+    user_count = StringField('user_count')
+

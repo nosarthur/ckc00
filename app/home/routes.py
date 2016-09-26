@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_required, current_user
 
 from . import home
-from .forms import ProfileForm
+from .forms import ProfileForm, StatForm
 from .. import db
 from ..models import User
 
@@ -21,6 +21,12 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('home/user.html', user=user)
 
+@home.route('/stats')
+def stats():
+    form = StatForm()
+    form.user_count = User.query.filter(User.email.isnot(None)).count()
+    return render_template('home/stats.html', form=form)
+
 @home.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -28,10 +34,18 @@ def profile():
     if form.validate_on_submit():
         username = form.username.data
         user = User.query.filter_by(username=username).first()        
+
         if user and user.id != current_user.id:
             flash('This username is already taken.')
             return redirect(url_for('home.profile'))
         current_user.username = username
+
+        print current_user.site
+        if not current_user.site and form.site.data:
+            current_user.awards += 1
+        elif current_user.site and not form.site.data:
+            current_user.awards -= 1
+            
         current_user.site = form.site.data
 
         db.session.add(current_user._get_current_object())
@@ -68,15 +82,13 @@ def query():
     if not sex or not class_type:
         return redirect(url_for('home.index'))
 
-    if sex=='all' and class_type=='all':
-        rows = q.all()
-    elif sex=='all' and class_type!='all':
-        rows = q.filter_by(class_type=class_type)
-    elif sex!='all' and class_type=='all':
-        rows = q.filter_by(sex=sex)
-    else:
-        rows = q.filter_by(sex=sex, class_type=class_type)
-    
+    filters = {}
+    if sex != 'all':
+        filters['sex'] = sex
+    if class_type != 'all':
+        filters['class_type'] = class_type
+    rows = q.filter_by(**filters)
+
     writer.writerows(rows)
     return output.getvalue()
 
