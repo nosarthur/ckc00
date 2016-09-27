@@ -16,16 +16,10 @@ A web application that visualizes the location of CKC00 alumni.
 ## Feature requests
 
 * email users
+* message board
 * user privilege
-    * request features
-    * report bugs
-    * submit updates
     * receive updates of other alumni
     * access to more statistical information
-* user engagement
-    * award points: water droplets
-        * input information
-        * referal 
 * error handlers
 
 ## License

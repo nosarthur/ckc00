@@ -7,7 +7,7 @@
 <li> Anonymous users can </li>
 	<ul>
     <li> display alumni on US map </li>
-    <li> query using alumnus name </li>
+    <li> query using alumnus name (capitalization insensitive) </li>
     <li> query with sex and class </li>
 	</ul>
 <li> Registered users can further </li>
@@ -19,10 +19,15 @@
 <li> User registration is referal only. </li>
 </ul>
 
+<h3> Status </h3>
+<ul>
+<li> Registered users: {{ form.user_count }} </li>
+</ul>
+
 <div>
 <h3> TODO </h3>
 <ul class="list-group">
-  <li class="list-group-item list-group-item-success">feedback system</li>
+  <li class="list-group-item list-group-item-success">message board</li>
   <li class="list-group-item list-group-item-danger">email support</li>
   <li class="list-group-item list-group-item-success">point system</li>
 </ul>

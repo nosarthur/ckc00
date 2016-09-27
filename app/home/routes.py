@@ -8,24 +8,24 @@ from .forms import ProfileForm, StatForm
 from .. import db
 from ..models import User
 
+
 @home.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('home/index.html')
 
+
 @home.route('/help')
 def help():
-    return render_template('home/help.html')
+    form = StatForm()
+    form.user_count = User.query.filter(User.email.isnot(None)).count()
+    return render_template('home/help.html', form=form)
+
 
 @home.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('home/user.html', user=user)
 
-@home.route('/stats')
-def stats():
-    form = StatForm()
-    form.user_count = User.query.filter(User.email.isnot(None)).count()
-    return render_template('home/stats.html', form=form)
 
 @home.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -33,7 +33,7 @@ def profile():
     form = ProfileForm()
     if form.validate_on_submit():
         username = form.username.data
-        user = User.query.filter_by(username=username).first()        
+        user = User.query.filter_by(username=username).first()
 
         if user and user.id != current_user.id:
             flash('This username is already taken.')
@@ -56,6 +56,7 @@ def profile():
     form.site.data = current_user.site
 
     return render_template('home/profile.html', form=form)
+
 
 @home.route('/db')
 def query():
