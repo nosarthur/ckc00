@@ -1,6 +1,7 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField
-from wtforms.validators import Length, Optional, URL
+from wtforms import StringField, SubmitField, PasswordField
+from wtforms.validators import Length, Optional, URL, InputRequired, \
+                                EqualTo
 
 
 class ProfileForm(Form):
@@ -14,3 +15,12 @@ class ProfileForm(Form):
 class StatForm(Form):
     user_count = StringField('user_count')
 
+class ResetForm(Form):
+
+    old_pwd = PasswordField('old password', validators=[InputRequired()])
+    new_pwd = PasswordField('new password',
+            validators=[InputRequired(), Length(6, 25), 
+            EqualTo('confirm', message='passwords needs to match')])
+    confirm = PasswordField('repeat')
+
+    reset = SubmitField('Reset')

@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_required, current_user
 
 from . import home
-from .forms import ProfileForm, StatForm
+from .forms import ProfileForm, StatForm, ResetForm
 from .. import db
 from ..models import User
 
@@ -30,9 +30,14 @@ def user(username):
 @home.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    form = ProfileForm()
-    if form.validate_on_submit():
-        username = form.username.data
+    form_profile = ProfileForm()
+    form_reset = ResetForm()
+
+    if form_profile.validate_on_submit() and form_profile.submit.data:
+        username = form_profile.username.data
+        if not username:
+            flash('Username cannot be null.')
+            return redirect(url_for('home.profile'))
         user = User.query.filter_by(username=username).first()
 
         if user and user.id != current_user.id:
@@ -40,22 +45,36 @@ def profile():
             return redirect(url_for('home.profile'))
         current_user.username = username
 
-        print current_user.site
-        if not current_user.site and form.site.data:
+        if not current_user.site and form_profile.site.data:
             current_user.awards += 1
-        elif current_user.site and not form.site.data:
+        elif current_user.site and not form_profile.site.data:
             current_user.awards -= 1
             
-        current_user.site = form.site.data
+        current_user.site = form_profile.site.data
 
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
         return redirect(url_for('home.user', username=username))
-    form.username.data = current_user.username
-    form.site.data = current_user.site
+    form_profile.username.data = current_user.username
+    form_profile.site.data = current_user.site
 
-    return render_template('home/profile.html', form=form)
+    if form_reset.validate_on_submit() and form_reset.reset.data:
+        if not current_user.verify_password(form_reset.old_pwd.data):
+            flash('Invalid password.')
+            return redirect(url_for('home.profile'))
+
+        current_user.password = form_reset.confirm.data
+        db.session.add(current_user._get_current_object())
+        db.session.commit()
+
+        flash('Your password has been updated.')
+        return redirect(url_for('home.user', 
+                            username=current_user.username))
+
+    return render_template('home/profile.html', 
+        form_profile=form_profile, 
+        form_reset=form_reset)
 
 
 @home.route('/db')
