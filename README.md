@@ -16,11 +16,9 @@ A web application that visualizes the location of CKC00 alumni.
 ## Feature requests
 
 * email users
-* message board
 * user privilege
     * receive updates of other alumni
     * access to more statistical information
-* error handlers
 
 ## License
 This project is licensed under the MIT License.

@@ -2,7 +2,7 @@
 
 {% block page_content %}
 <div class='page-header user-profile' >
-    <div class='user-avatar'><img src='{{ user.gravatar(128) }}'></div>
+    <div class='user-avatar'><img src='{{ user.avatar(128) }}'></div>
     {% if current_user == user %}
     <a class='btn btn-default pull-right' href='{{ url_for('home.profile') }}'>Edit Profile</a>
     {% endif %}
@@ -25,7 +25,14 @@
         Member since:
         {{ user.member_since.strftime('%Y-%m-%d') }} <br>
         {% endif %}
+        {% if user.last_seen %}
+        Last seen: 
+        {{ user.last_seen.strftime('%Y-%m-%d') }} <br>
+        {% endif %}
     </p>
 </div>
+  {% for post in posts %}
+     {% include 'post.html' %}
+  {% endfor %}
 {% endblock %}
 

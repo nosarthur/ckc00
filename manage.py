@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import os
+import imp
 import json
-from flask.ext.script import Manager
 from datetime import datetime
+from flask.ext.script import Manager
+from migrate.versioning import api
 
 from app import create_app
 from app import db
@@ -18,6 +20,42 @@ def createDB(drop_first=False):
     if drop_first:
         db.drop_all()
     db.create_all()
+
+    repo = app.config['SQLALCHEMY_MIGRATE_REPO']
+    uri = app.config['SQLALCHEMY_DATABASE_URI']
+    if not os.path.exists(repo):
+        api.create(repo, 'database repository')
+        api.version_control(uri, repo)
+    else:
+        api.version_control(uri, repo, api.version(repo))
+
+
+@manager.command
+def migrateDB():
+    repo = app.config['SQLALCHEMY_MIGRATE_REPO']
+    uri = app.config['SQLALCHEMY_DATABASE_URI']
+
+    v = api.db_version(uri, repo)
+    migration = repo + ('/versions/%03d_migration.py' % (v+1))
+    tmp_module = imp.new_module('old_model')
+    old_model = api.create_model(uri, repo)
+    exec(old_model, tmp_module.__dict__)
+    script = api.make_update_script_for_model(uri, repo, 
+                                    tmp_module.meta, db.metadata)
+    open(migration, "wt").write(script)
+    api.upgrade(uri, repo)
+    v = api.db_version(uri, repo)
+    print('New migration saved as ' + migration)
+    print('Current database version: ' + str(v))
+
+
+@manager.command
+def upgradeDB():
+    repo = app.config['SQLALCHEMY_MIGRATE_REPO']
+    uri = app.config['SQLALCHEMY_DATABASE_URI']
+    api.upgrade(uri, repo)
+    v = api.db_version(uri, repo)
+    print('Current database version: ' + str(v))
 
 
 @manager.command
@@ -47,7 +85,10 @@ def createDBfromJSON():
         users = json.load(fin)
 
     for user in users:
-        user['username'] = user.get('username', user['id'])
+        if user['bbs_id']:
+            user['username'] = user.get('username', user['bbs_id'])
+        else:
+            user['username'] = user.get('username', user['id'])
         db.session.add(User(**user))
 
     db.session.commit()

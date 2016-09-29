@@ -1,5 +1,6 @@
 import io
 import csv
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_required, current_user
 
@@ -24,32 +25,28 @@ def help():
 @home.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('home/user.html', user=user)
+    posts = [
+            {'author': user, 'body': 'Test post #1'},
+            {'author': user, 'body': 'Test post #2'}
+            ]
+    return render_template('home/user.html', user=user, posts=posts)
 
 
 @home.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    form_profile = ProfileForm()
+    form_profile = ProfileForm(current_user.username)
     form_reset = ResetForm()
 
-    if form_profile.validate_on_submit() and form_profile.submit.data:
+    if form_profile.validate_on_submit(): 
         username = form_profile.username.data
-        if not username:
-            flash('Username cannot be null.')
-            return redirect(url_for('home.profile'))
-        user = User.query.filter_by(username=username).first()
-
-        if user and user.id != current_user.id:
-            flash('This username is already taken.')
-            return redirect(url_for('home.profile'))
-        current_user.username = username
 
         if not current_user.site and form_profile.site.data:
             current_user.awards += 1
         elif current_user.site and not form_profile.site.data:
             current_user.awards -= 1
-            
+
+        current_user.username = username
         current_user.site = form_profile.site.data
 
         db.session.add(current_user._get_current_object())
@@ -59,7 +56,7 @@ def profile():
     form_profile.username.data = current_user.username
     form_profile.site.data = current_user.site
 
-    if form_reset.validate_on_submit() and form_reset.reset.data:
+    if form_reset.validate_on_submit(): 
         if not current_user.verify_password(form_reset.old_pwd.data):
             flash('Invalid password.')
             return redirect(url_for('home.profile'))
@@ -112,4 +109,26 @@ def query():
     writer.writerows(rows)
     return output.getvalue()
 
-   
+
+@home.before_request
+def before_request():
+    user = current_user
+    if user.is_authenticated:
+        user.last_seen = datetime.utcnow()
+        db.session.add(user)
+        db.session.commit()
+
+
+@home.app_errorhandler(403)
+def forbidden(error):
+    return render_template('403.html'), 403
+
+@home.app_errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@home.app_errorhandler(500)
+def not_found_error(error):
+    return render_template('500.html'), 500
+
+

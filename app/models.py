@@ -27,8 +27,9 @@ class User(UserMixin, db.Model):
     site = db.Column(db.String(64))
     member_since = db.Column(db.DateTime())
     avatar_hash = db.Column(db.String(32), default='0')
-    # last_login = db.Column(db.DateTime())
+    last_seen = db.Column(db.DateTime())
     awards = db.Column(db.Integer, nullable=False, default=0)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -47,7 +48,7 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def gravatar(self, size=100, default='identicon', rating='g'):
+    def avatar(self, size=100, default='identicon', rating='g'):
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
         else:
@@ -69,3 +70,15 @@ class User(UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    d = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    likes = db.Column(db.Integer, nullable=False, default=0)
+
+    def __repr__(self):
+        return '<Post %r>' % (self.body)
