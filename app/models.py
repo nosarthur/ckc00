@@ -5,6 +5,12 @@ from flask.ext.login import UserMixin
 
 from . import db, login_manager
 
+likes = db.Table('likes', 
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'),
+                nullable=False),
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'),
+                nullable=False)
+    )
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -30,6 +36,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime())
     awards = db.Column(db.Integer, nullable=False, default=0)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    liked = db.relationship('Post', secondary=likes, 
+                backref=db.backref('fans', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -62,6 +70,9 @@ class User(UserMixin, db.Model):
                     size=size, default=default,
                     rating=rating)
 
+    def is_liking(self, post):
+        return self.liked.filter(likes.c.post_id==post.id).count()>0
+
     def __repr__(self):
         return "<User(88id='%s', name='%s', email='%s')>" \
             % (self.bbs_id, self.name, self.email)
@@ -77,8 +88,11 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     likes = db.Column(db.Integer, nullable=False, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return "<Post('%r', user_id='%s')>" % (self.body, self.user_id)
+
+
+

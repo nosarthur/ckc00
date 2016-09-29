@@ -26,7 +26,9 @@ def help():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     form = PostForm()
-    if current_user.is_authenticated and form.validate_on_submit():
+    
+    if current_user.is_authenticated and form.submit.data \
+            and form.validate_on_submit():
         post = Post(body=form.post.data,
                     timestamp=datetime.utcnow(),
                     author=current_user)
@@ -35,7 +37,13 @@ def user(username):
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your post is now live!')
-    return render_template('home/user.html', user=user, form=form)
+
+    posts = user.posts.all()
+    if current_user.is_authenticated:
+        posts.extend(user.liked.all())
+
+    return render_template('home/user.html', user=user, 
+                            form=form, posts=posts)
 
 
 @home.route('/profile', methods=['GET', 'POST'])
@@ -45,20 +53,19 @@ def profile():
     form_reset = ResetForm()
 
     if form_profile.submit.data and form_profile.validate_on_submit():
-        username = form_profile.username.data
-
         if not current_user.site and form_profile.site.data:
             current_user.awards += 1
         elif current_user.site and not form_profile.site.data:
             current_user.awards -= 1
 
-        current_user.username = username
+        current_user.username = form_profile.username.data
         current_user.site = form_profile.site.data
 
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your profile has been updated.')
-        return redirect(url_for('home.user', username=username))
+        return redirect(url_for('home.user',
+                        username=current_user.username))
     form_profile.username.data = current_user.username
     form_profile.site.data = current_user.site
 
@@ -73,11 +80,11 @@ def profile():
 
         flash('Your password has been updated.')
         return redirect(url_for('home.user', 
-                            username=current_user.username))
+                                username=current_user.username))
 
     return render_template('home/profile.html', 
-        form_profile=form_profile, 
-        form_reset=form_reset)
+                form_profile=form_profile, 
+                form_reset=form_reset)
 
 
 @home.route('/db')
