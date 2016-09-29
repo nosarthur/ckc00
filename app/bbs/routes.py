@@ -5,10 +5,11 @@ from flask.ext.login import login_user, logout_user, login_required
 from . import bbs
 
 from .. import db
-from ..models import User
+from ..models import Post
 
 @bbs.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('bbs/index.html')
+    posts = Post.query.all()
+    return render_template('bbs/index.html', posts=posts)
 
 

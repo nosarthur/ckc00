@@ -74,11 +74,11 @@ def load_user(user_id):
 class Post(db.Model):
     __tablename__ = 'posts'
 
-    d = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     likes = db.Column(db.Integer, nullable=False, default=0)
 
     def __repr__(self):
-        return '<Post %r>' % (self.body)
+        return "<Post('%r', user_id='%s')>" % (self.body, self.user_id)

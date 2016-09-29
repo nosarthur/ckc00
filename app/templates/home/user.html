@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block page_content %}
 <div class='page-header user-profile' >
@@ -31,8 +32,10 @@
         {% endif %}
     </p>
 </div>
-  {% for post in posts %}
-     {% include 'post.html' %}
-  {% endfor %}
+
+{% if current_user.is_authenticated and current_user.id == user.id%}
+  {{ wtf.quick_form(form, form_type='horizontal') }}
+{% endif %}
+
 {% endblock %}
 

@@ -2,6 +2,13 @@
 
 {% block page_content %}
 
-<h1> hello </h1>
+<table class="table table-striped">
+
+{% for post in posts %}
+    <tr>
+    {% include 'post.html' %}
+    </tr>
+{% endfor %}
+</table>
 
 {% endblock %}

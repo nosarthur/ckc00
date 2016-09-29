@@ -5,9 +5,9 @@ from flask import render_template, flash, redirect, url_for, request
 from flask.ext.login import login_required, current_user
 
 from . import home
-from .forms import ProfileForm, StatForm, ResetForm
+from .forms import ProfileForm, StatForm, ResetForm, PostForm
 from .. import db
-from ..models import User
+from ..models import User, Post
 
 
 @home.route('/', methods=['GET', 'POST'])
@@ -22,14 +22,20 @@ def help():
     return render_template('home/help.html', form=form)
 
 
-@home.route('/user/<username>')
+@home.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-            {'author': user, 'body': 'Test post #1'},
-            {'author': user, 'body': 'Test post #2'}
-            ]
-    return render_template('home/user.html', user=user, posts=posts)
+    form = PostForm()
+    if current_user.is_authenticated and form.validate_on_submit():
+        post = Post(body=form.post.data,
+                    timestamp=datetime.utcnow(),
+                    author=current_user)
+        current_user.awards += 1
+        db.session.add(post)
+        db.session.add(current_user._get_current_object())
+        db.session.commit()
+        flash('Your post is now live!')
+    return render_template('home/user.html', user=user, form=form)
 
 
 @home.route('/profile', methods=['GET', 'POST'])
@@ -38,7 +44,7 @@ def profile():
     form_profile = ProfileForm(current_user.username)
     form_reset = ResetForm()
 
-    if form_profile.validate_on_submit(): 
+    if form_profile.submit.data and form_profile.validate_on_submit():
         username = form_profile.username.data
 
         if not current_user.site and form_profile.site.data:
@@ -56,7 +62,7 @@ def profile():
     form_profile.username.data = current_user.username
     form_profile.site.data = current_user.site
 
-    if form_reset.validate_on_submit(): 
+    if form_reset.reset.data and form_reset.validate_on_submit():
         if not current_user.verify_password(form_reset.old_pwd.data):
             flash('Invalid password.')
             return redirect(url_for('home.profile'))

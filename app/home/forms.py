@@ -33,8 +33,14 @@ class ResetForm(Form):
 
     old_pwd = PasswordField('old password', validators=[InputRequired()])
     new_pwd = PasswordField('new password',
-            validators=[InputRequired(), Length(6, 25), 
+            validators=[InputRequired(), Length(6, 32), 
             EqualTo('confirm', message='passwords needs to match')])
     confirm = PasswordField('repeat')
 
     reset = SubmitField('Reset')
+
+
+class PostForm(Form):
+    post = StringField('post', validators=[InputRequired(),
+                            Length(1, 140)])
+    submit = SubmitField('Submit')
