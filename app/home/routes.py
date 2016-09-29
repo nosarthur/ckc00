@@ -36,7 +36,7 @@ def user(username):
         db.session.add(post)
         db.session.add(current_user._get_current_object())
         db.session.commit()
-        flash('Your post is now live!')
+        flash('You just poured some water!')
 
     posts = user.posts.all()
     if current_user.is_authenticated:
@@ -58,8 +58,20 @@ def profile():
         elif current_user.site and not form_profile.site.data:
             current_user.awards -= 1
 
+        if not current_user.city and form_profile.city.data:
+            current_user.awards += 1
+        elif current_user.city and not form_profile.city.data:
+            current_user.awards -= 1
+
+        if not current_user.state and form_profile.state.data:
+            current_user.awards += 1
+        elif current_user.state and not form_profile.state.data:
+            current_user.awards -= 1
+
         current_user.username = form_profile.username.data
         current_user.site = form_profile.site.data
+        current_user.city = form_profile.city.data
+        current_user.state = form_profile.state.data
 
         db.session.add(current_user._get_current_object())
         db.session.commit()
@@ -68,6 +80,8 @@ def profile():
                         username=current_user.username))
     form_profile.username.data = current_user.username
     form_profile.site.data = current_user.site
+    form_profile.city.data = current_user.city
+    form_profile.state.data = current_user.state
 
     if form_reset.reset.data and form_reset.validate_on_submit():
         if not current_user.verify_password(form_reset.old_pwd.data):

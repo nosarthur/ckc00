@@ -4,21 +4,22 @@ A web application that visualizes the location of CKC00 alumni.
 
 ## Features
 
-* anonymous 
+* Anonymous users
     * display alumni on US map
-    * query using alumnus name
+    * query using alumnus name (capitalization insensitive)
     * query with sex and class
-* registered user
-    * display alumni names
-    * view alumni profiles
-    * edit profiles
+    * read tweet-like messages
+* Registered user
+    * view alumni names on map 
+    * maintain a profile
+    * view more alumni information on their profiles
+    * change avatar: <a href='https://en.gravatar.com/' target="_blank">gravatar</a> 
+    * post/like tweet-like messages
 
 ## Feature requests
 
-* email users
-* user privilege
-    * receive updates of other alumni
-    * access to more statistical information
+* email support
+* time zone suport
 
 ## License
 This project is licensed under the MIT License.

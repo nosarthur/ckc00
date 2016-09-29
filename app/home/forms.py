@@ -10,6 +10,8 @@ class ProfileForm(Form):
                            validators=[InputRequired(), Length(1, 64)])
     site = StringField('website',
                        validators=[URL(), Optional(), Length(5, 64)])
+    city = StringField('city', validators=[Optional(), Length(2, 32)])
+    state = StringField('state', validators=[Optional(), Length(2, 32)])
     submit = SubmitField('Submit')
 
     def __init__(self, old_username, *args, **kwargs):

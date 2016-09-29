@@ -16,12 +16,12 @@ def index():
 @bbs.route('/upvote/<post_id>')
 def upvote(post_id):
     if not current_user.is_authenticated:
-        flash('Your are not logged-in!')
+        flash('Registered user only.')
         return redirect(request.referrer)
 
     post = Post.query.get(int(post_id))
     if current_user.id == post.author.id:
-        flash('Voting for yourself is destruction.')
+        flash('Narcissism is destruction.')
         db.session.delete(post)
         db.session.commit()
         post.author.awards -= 1

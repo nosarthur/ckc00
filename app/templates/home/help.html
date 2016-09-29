@@ -14,11 +14,12 @@
 <li> Registered users </li>
     <ul>
     <li> view alumni names on map </li>
+    <li> maintain a profile </li>
     <li> view more alumni information on their profiles </li>
     <li> change avatar: <a href='https://en.gravatar.com/' target="_blank">gravatar</a> </li>
-    <li> post/upvote tweet-like messages </li>
+    <li> post/like tweet-like messages </li>
     </ul>
-<li> User registration is referal only. </li>
+<li> User registration is ....by hand.... for now (shoot <a href='{{ url_for('home.user', username='nos') }}'>me</a> an email). </li>
 </ul>
 
 <h3> Status </h3>
@@ -29,12 +30,13 @@
 <div>
 <h3> TODO </h3>
 <ul class="list-group">
-  <li class="list-group-item list-group-item-danger">email support</li>
-  <li class="list-group-item list-group-item-success">update upvote using javascript</li>
-  <li class="list-group-item list-group-item-success">delete post</li>
+  <li class="list-group-item list-group-item-warning">email support</li>
+  <li class="list-group-item list-group-item-info">time zone support</li>
+  <li class="list-group-item list-group-item-danger">use javascript to do update</li>
 </ul>
 </div>
 <hr>
-<h4> Version 0.2 : 9.23.2016 </h4>
+<h4> Version 0.3 : 9.29.2016 </h4>
+<h4> database Version 13 </h4>
 
 {% endblock %}
