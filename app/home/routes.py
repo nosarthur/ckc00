@@ -2,7 +2,7 @@ import io
 import csv
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from . import home
 from .forms import ProfileForm, StatForm, ResetForm, PostForm

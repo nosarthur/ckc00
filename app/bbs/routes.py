@@ -1,6 +1,6 @@
 from flask import render_template, current_app, request, \
                   redirect, url_for, flash
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from . import bbs
 

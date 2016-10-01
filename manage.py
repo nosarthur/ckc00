@@ -3,7 +3,7 @@ import os
 import imp
 import json
 from datetime import datetime
-from flask.ext.script import Manager
+from flask_script import Manager
 from migrate.versioning import api
 
 from app import create_app

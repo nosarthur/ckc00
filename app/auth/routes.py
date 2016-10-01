@@ -1,6 +1,6 @@
 from flask import render_template, current_app, request, \
                   redirect, url_for, flash
-from flask.ext.login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required
 
 from . import auth
 from .forms import LoginForm
@@ -9,9 +9,9 @@ from ..models import User
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    print 'debug? ', current_app.config['DEBUG']
-    print 'key? ', current_app.config['SECRET_KEY']
-    print current_app.config['SQLALCHEMY_DATABASE_URI']
+    #print 'debug? ', current_app.config['DEBUG']
+    #print 'key? ', current_app.config['SECRET_KEY']
+    #print current_app.config['SQLALCHEMY_DATABASE_URI']
     if not current_app.config['DEBUG'] \
        and not current_app.config['TESTING'] \
        and not request.is_secure:

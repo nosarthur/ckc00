@@ -24,11 +24,11 @@
         {{ user.awards }} <br>
         {% if user.member_since %}
         Member since:
-        {{ user.member_since.strftime('%Y-%m-%d') }} <br>
+        {{ user.member_since.strftime('%m-%d-%Y') }} <br>
         {% endif %}
         {% if user.last_seen %}
         Last seen: 
-        {{ user.last_seen.strftime('%Y-%m-%d') }} <br>
+        {{ user.last_seen.strftime('%m-%d-%Y') }} <br>
         {% endif %}
     </p>
 </div>
