@@ -3,7 +3,7 @@
 
 <td> <button type="button" data-id='{{ post.id }}' class="upvote btn btn-default">
   <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-  </button><span> {{ post.likes}} </span> 
+  </button><span id='{{post.id}}'> {{ post.likes}} </span> 
    </td>
 <td>    <a href='{{ url_for('home.user', username=post.author.username) }}'>{{post.author.username}}</a><br> {{ post.timestamp.strftime('%I:%M%p %a %m/%d/%Y') }}</td>
 

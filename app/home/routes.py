@@ -37,6 +37,8 @@ def user(username):
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('You just poured some water!')
+        form.post.data = ''
+        form.submit.data = False
 
     posts = user.posts.all()
     if current_user.is_authenticated:

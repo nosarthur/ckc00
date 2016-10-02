@@ -21,14 +21,14 @@
             {{ user.city }} , {{ user.state }} <br>
         {% endif %}
         Water points:
-        {{ user.awards }} <br>
+        <span id='{{user.username}}'>{{ user.awards }}</span> <br>
         {% if user.member_since %}
         Member since:
-        {{ user.member_since.strftime('%m-%d-%Y') }} <br>
+        {{ user.member_since.strftime('%m/%d/%Y') }} <br>
         {% endif %}
         {% if user.last_seen %}
         Last seen: 
-        {{ user.last_seen.strftime('%m-%d-%Y') }} <br>
+        {{ user.last_seen.strftime('%m/%d/%Y') }} <br>
         {% endif %}
     </p>
 </div>

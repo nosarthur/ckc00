@@ -1,3 +1,4 @@
+import json
 from flask import render_template, current_app, request, \
                   redirect, url_for, flash
 from flask_login import current_user
@@ -17,7 +18,7 @@ def index():
 def upvote(post_id):
     if not current_user.is_authenticated:
         flash('Registered user only.')
-        return redirect(request.referrer)
+        return json.dumps({'likes':-1})
 
     post = Post.query.get(int(post_id))
     if current_user.id == post.author.id:
@@ -27,7 +28,7 @@ def upvote(post_id):
         post.author.awards -= 1
         db.session.add(post.author)
         db.session.commit()
-        return redirect(request.referrer)
+        return json.dumps({'likes':-1})
 
     if current_user.is_liking(post):
         current_user.liked.remove(post)
@@ -42,4 +43,6 @@ def upvote(post_id):
     db.session.add(post)
     db.session.commit()
 
-    return redirect(request.referrer)
+    return json.dumps({'likes':post.likes, 
+                'author':post.author.username,
+                'awards':post.author.awards})
