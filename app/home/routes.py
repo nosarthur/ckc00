@@ -41,7 +41,10 @@ def refer():
             note=form.note.data)
         send_email('ckc00', 'ckc00zju@gmail.com', 
                     'referal request', body , '')
-        flash('Email sent!')
+        flash('Request sent to administrator!')
+        form.name.data = ''
+        form.email.data = ''
+        form.note.data = ''
     return render_template('home/refer.html', form=form)
 
 
