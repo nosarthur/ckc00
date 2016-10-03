@@ -1,0 +1,3 @@
+{{ inviter }} ({{ inviter_id }}) invited {{ invitee }} ({{ email }}) in {{ class_type }} 
+
+{{ note }}

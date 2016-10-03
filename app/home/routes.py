@@ -1,13 +1,15 @@
 import io
 import csv
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, \
+                    request, session 
 from flask_login import login_required, current_user
 
 from . import home
-from .forms import ProfileForm, StatForm, ResetForm, PostForm
+from .forms import ProfileForm, ReferForm, ResetForm, PostForm
 from .. import db
 from ..models import User, Post
+from ..email import send_email
 
 
 @home.route('/', methods=['GET', 'POST'])
@@ -17,9 +19,30 @@ def index():
 
 @home.route('/help')
 def help():
-    form = StatForm()
-    form.user_count = User.query.filter(User.email.isnot(None)).count()
-    return render_template('home/help.html', form=form)
+    if not session.has_key('user_count'):
+        session['user_count'] = User.query.filter(
+                                User.email.isnot(None)
+                                ).count()
+    return render_template('home/help.html',
+                user_count=session['user_count'])
+
+
+@home.route('/refer', methods=['GET', 'POST'])
+@login_required
+def refer():
+    form = ReferForm()
+    if form.validate_on_submit():
+        body = render_template('referral_email.txt', 
+            inviter=current_user.username,
+            inviter_id =current_user.id,
+            invitee=form.name.data,
+            email=form.email.data,
+            class_type=form.class_type.data,
+            note=form.note.data)
+        send_email('ckc00', 'ckc00zju@gmail.com', 
+                    'referal request', body , '')
+        flash('Email sent!')
+    return render_template('home/refer.html', form=form)
 
 
 @home.route('/user/<username>', methods=['GET', 'POST'])

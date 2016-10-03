@@ -2,7 +2,7 @@
 
 {% block page_content %}
 
-<h3> Functions </h3>
+<h3> Features </h3>
 <ul>
 <li> Anonymous users </li>
 	<ul>
@@ -18,24 +18,28 @@
     <li> view more alumni information on their profiles </li>
     <li> change avatar: <a href='https://en.gravatar.com/' target="_blank">gravatar</a> </li>
     <li> post/like tweet-like messages </li>
+    <li> <a href='{{ url_for('home.refer') }}'>refer other alumni</a></li>
     </ul>
-<li> User registration is ....by hand.... for now (shoot <a href='{{ url_for('home.user', username='nos') }}'>me</a> an email). </li>
+<li> User registration </li>
+    <ul>
+    <li> shoot <a href='{{ url_for('home.user', username='nos') }}'>me</a> an email </li>
+    <li> ask registered user to refer you </li>
+    </ul>
 </ul>
 
 <h3> Status </h3>
 <ul>
-<li> Registered users: {{ form.user_count }} </li>
+<li> Registered users: {{ user_count }} </li>
 </ul>
 
 <div>
 <h3> TODO </h3>
 <ul class="list-group">
-  <li class="list-group-item list-group-item-warning">email support</li>
   <li class="list-group-item list-group-item-info">time zone support</li>
 </ul>
 </div>
 <hr>
-<h4> Version 0.3 : 9.29.2016 </h4>
+<h4> Version 0.4 : 10.3.2016 </h4>
 <h4> database Version 13 </h4>
 
 {% endblock %}

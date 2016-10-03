@@ -1,7 +1,7 @@
 from flask_wtf import Form
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import Length, Optional, URL, InputRequired, \
-                                EqualTo
+                                EqualTo, Email
 
 from ..models import User
 
@@ -28,11 +28,21 @@ class ProfileForm(Form):
             return False
         return True
 
-class StatForm(Form):
-    user_count = StringField('user_count')
+
+class ReferForm(Form):
+    name = StringField('name', validators=[InputRequired(), 
+                                           Length(max=32)])
+    email = StringField('Email', validators=[InputRequired(),
+                                             Length(10, 64), Email()])
+    class_type = SelectField('Class', choices=[('mixed', 'Mixed'),
+                           ('litart', 'Lit. Art'),
+                           ('science', 'Science'), 
+                           ('eduexp', 'Edu. Exp.')])
+    note = StringField('Note', validators=[Optional(), 
+                                                 Length(max=64)])
+    submit = SubmitField('Submit')
 
 class ResetForm(Form):
-
     old_pwd = PasswordField('old password', validators=[InputRequired()])
     new_pwd = PasswordField('new password',
             validators=[InputRequired(), Length(6, 32), 

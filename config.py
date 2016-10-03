@@ -8,12 +8,12 @@ class Config(object):
     TESTING = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
-    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_SENDER') or 'ckc00zju@gmail.com'
+    MAIL_DEFAULT_SENDER = 'ckc00zju@gmail.com'
 
 class DevelopmentConfig(Config):
     DEBUG = True
