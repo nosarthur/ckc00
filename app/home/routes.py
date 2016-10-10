@@ -17,13 +17,13 @@ def index():
     return render_template('home/index.html')
 
 
-@home.route('/help')
-def help():
+@home.route('/about')
+def about():
     if not session.has_key('user_count'):
         session['user_count'] = User.query.filter(
                                 User.email.isnot(None)
                                 ).count()
-    return render_template('home/help.html',
+    return render_template('home/about.html',
                 user_count=session['user_count'])
 
 

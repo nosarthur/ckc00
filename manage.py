@@ -68,7 +68,8 @@ def adduser(email, user_id):
         import sys
         sys.exit('Error: passwords do not match.')
     db.create_all()
-    user = User.query.filter_by(id=user_id).first()
+    #user = User.query.filter_by(id=user_id).first()
+    user = User.query.get(int(user_id))
     user.email = email
     user.password = password
     user.member_since = datetime.utcnow()
