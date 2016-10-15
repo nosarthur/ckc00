@@ -138,12 +138,13 @@ def query():
     output = io.BytesIO()
     writer = csv.writer(output)
 
-    cols = ['id', 'display_name', 'city', 'state', 'latitude', 'longitude']
+    cols = ['id', 'display_name', 'username',
+            'city', 'state', 'latitude', 'longitude']
     writer.writerow(cols)
     if current_user.is_authenticated:
         cols[1] = 'name'
     else:
-        cols[1] = 'bbs_id'
+        cols[1] = 'username'
     q = User.query.with_entities(*(getattr(User, col) for col in cols))
 
     if name: # name query

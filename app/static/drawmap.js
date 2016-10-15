@@ -132,6 +132,7 @@ function draw_from_url(url){
                               .attr('y', d3.event.pageY-110)
                               .text(d.display_name+', '+d.city)
           })
+       .on("click", function(d) { window.open("/user/"+d.username, '_self'); })
        .on('mouseout', function(){
            d3.select('#tooltip').remove();
        });
